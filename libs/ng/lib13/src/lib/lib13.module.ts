@@ -34,7 +34,39 @@ import { Lib13MainComponent } from './lib13-main/lib13-main.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [Lib13Component0Component, Lib13Component1Component, Lib13Component2Component, Lib13Component3Component, Lib13Component4Component, Lib13Component5Component, Lib13Component6Component, Lib13Component7Component, Lib13Component8Component, Lib13Component9Component, Lib13Component10Component, Lib13Component11Component, Lib13Component12Component, Lib13Component13Component, Lib13Component14Component, Lib13Component15Component, Lib13Component16Component, Lib13Component17Component, Lib13Component18Component, Lib13Component19Component, Lib13Component20Component, Lib13Component21Component, Lib13Component22Component, Lib13Component23Component, Lib13Component24Component, Lib13Component25Component, Lib13Component26Component, Lib13Component27Component, Lib13Component28Component, Lib13Component29Component, Lib13MainComponent],
+  declarations: [
+    Lib13Component0Component,
+    Lib13Component1Component,
+    Lib13Component2Component,
+    Lib13Component3Component,
+    Lib13Component4Component,
+    Lib13Component5Component,
+    Lib13Component6Component,
+    Lib13Component7Component,
+    Lib13Component8Component,
+    Lib13Component9Component,
+    Lib13Component10Component,
+    Lib13Component11Component,
+    Lib13Component12Component,
+    Lib13Component13Component,
+    Lib13Component14Component,
+    Lib13Component15Component,
+    Lib13Component16Component,
+    Lib13Component17Component,
+    Lib13Component18Component,
+    Lib13Component19Component,
+    Lib13Component20Component,
+    Lib13Component21Component,
+    Lib13Component22Component,
+    Lib13Component23Component,
+    Lib13Component24Component,
+    Lib13Component25Component,
+    Lib13Component26Component,
+    Lib13Component27Component,
+    Lib13Component28Component,
+    Lib13Component29Component,
+    Lib13MainComponent
+  ],
   exports: [Lib13MainComponent]
 })
 export class Lib13Module {}

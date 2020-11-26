@@ -34,7 +34,39 @@ import { Lib1MainComponent } from './lib1-main/lib1-main.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [Lib1Component0Component, Lib1Component1Component, Lib1Component2Component, Lib1Component3Component, Lib1Component4Component, Lib1Component5Component, Lib1Component6Component, Lib1Component7Component, Lib1Component8Component, Lib1Component9Component, Lib1Component10Component, Lib1Component11Component, Lib1Component12Component, Lib1Component13Component, Lib1Component14Component, Lib1Component15Component, Lib1Component16Component, Lib1Component17Component, Lib1Component18Component, Lib1Component19Component, Lib1Component20Component, Lib1Component21Component, Lib1Component22Component, Lib1Component23Component, Lib1Component24Component, Lib1Component25Component, Lib1Component26Component, Lib1Component27Component, Lib1Component28Component, Lib1Component29Component, Lib1MainComponent],
+  declarations: [
+    Lib1Component0Component,
+    Lib1Component1Component,
+    Lib1Component2Component,
+    Lib1Component3Component,
+    Lib1Component4Component,
+    Lib1Component5Component,
+    Lib1Component6Component,
+    Lib1Component7Component,
+    Lib1Component8Component,
+    Lib1Component9Component,
+    Lib1Component10Component,
+    Lib1Component11Component,
+    Lib1Component12Component,
+    Lib1Component13Component,
+    Lib1Component14Component,
+    Lib1Component15Component,
+    Lib1Component16Component,
+    Lib1Component17Component,
+    Lib1Component18Component,
+    Lib1Component19Component,
+    Lib1Component20Component,
+    Lib1Component21Component,
+    Lib1Component22Component,
+    Lib1Component23Component,
+    Lib1Component24Component,
+    Lib1Component25Component,
+    Lib1Component26Component,
+    Lib1Component27Component,
+    Lib1Component28Component,
+    Lib1Component29Component,
+    Lib1MainComponent
+  ],
   exports: [Lib1MainComponent]
 })
 export class Lib1Module {}

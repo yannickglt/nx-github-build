@@ -1,4 +1,3 @@
-
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -22,7 +21,24 @@ import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, Lib0Module, Lib1Module, Lib2Module, Lib3Module, Lib4Module, Lib5Module, Lib6Module, Lib7Module, Lib8Module, Lib9Module, Lib10Module, Lib11Module, Lib12Module, Lib13Module, Lib14Module],
+  imports: [
+    BrowserModule,
+    Lib0Module,
+    Lib1Module,
+    Lib2Module,
+    Lib3Module,
+    Lib4Module,
+    Lib5Module,
+    Lib6Module,
+    Lib7Module,
+    Lib8Module,
+    Lib9Module,
+    Lib10Module,
+    Lib11Module,
+    Lib12Module,
+    Lib13Module,
+    Lib14Module
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
