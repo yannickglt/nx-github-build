@@ -40,14 +40,7 @@ jobs:
           key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
       - run: git fetch --no-tags --prune --depth=1 origin master
       - run: echo "GITHUB_BASE_SHA=$([[ "$GITHUB_REF" == "refs/origin/master" ]] && echo "origin/master~1" || echo "origin/master")" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
-      - name: Cache node modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
-      - run: git fetch --no-tags --prune --depth=1 origin master
-      - run: yarn format:check --base=$GITHUB_BASE_SHA
+      - run: node --max-old-space-size=8000 ./node_modules/@nrwl/cli/bin/nx.js format:check --base=$GITHUB_BASE_SHA
 
   distributed-task:
     runs-on: ubuntu-latest
@@ -72,24 +65,28 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules/.cache/nx
-          key: ${{ env.NX_CACHE }}
+          key: ${{ env.NX_CACHE }}-${{ hashFiles('yarn.lock') }}-${{ matrix.target }}-${{ matrix.index }}-${{ github.sha }}
+          restore-keys: |
+            ${{ env.NX_CACHE }}-${{ matrix.target }}-${{ matrix.index }}-
+            ${{ env.NX_CACHE }}-${{ hashFiles('yarn.lock') }}-
+            ${{ env.NX_CACHE }}-
       - name: Cache Cypress
         uses: actions/cache@v2
-        if: ${{ matrix.target == 'e2e' }}
+        if: matrix.target == 'e2e'
         with:
           path: ${{ env.CYPRESS_CACHE_FOLDER }}
           key: ${{ env.CYPRESS_CACHE }}
       - run: git fetch --no-tags --prune --depth=1 origin master
       - name: nx run-many:build
-        if: ${{ matrix.target == 'build' }}
+        if: matrix.target == 'build'
         run: node ./tools/scripts/run-many.js build ${{ matrix.index }} ${{ env.count }} $GITHUB_REF --prod
       - name: nx run-many:e2e
         uses: cypress-io/github-action@v2
-        if: ${{ matrix.target == 'e2e' }}
+        if: matrix.target == 'e2e'
         with:
           command: node ./tools/scripts/run-many.js e2e ${{ matrix.index }} ${{ env.count }} $GITHUB_REF
       - name: nx run-many:${{ matrix.target }}
-        if: ${{ matrix.target != 'build' && matrix.target != 'e2e' }}
+        if: matrix.target != 'build' && matrix.target != 'e2e'
         run: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} $GITHUB_REF
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
