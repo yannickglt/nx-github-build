@@ -22,9 +22,9 @@ If you run `nx dep-graph`, you will see something like this:
 
 ### CI Provider
 
-This example will use Gitlab CI, but you'll find similar setup for [Azure Pipelines](https://github.com/nrwl/nx-azure-build) and [Jenkins](https://github.com/nrwl/nx-jenkins-build) on Nx organization.
+This example will use Github Actions, but you'll find similar setup for [Azure Pipelines](https://github.com/nrwl/nx-azure-build), [Jenkins](https://github.com/nrwl/nx-jenkins-build) or [Gitlab CI](https://github.com/yannickglt/nx-gitlab-build).
 
-### **To see CI runs click [here](https://gitlab.com/yannickglt/nx-gitlab-build/pipelines).**
+### **To see CI runs click [here](https://github.com/yannickglt/nx-github-build/actions).**
 
 ## Baseline
 
@@ -54,14 +54,20 @@ Nx knows what is affected by your PR, so it doesn't have to test/build/lint ever
 If you update `azure-pipelines.yml` to use `nx affected` instead of `nx run-many`:
 
 ```yaml
-ci:
-  image: node:12.16.3-alpine3.11
-  before_script:
-    - yarn install
-  script:
-    - yarn nx affected --target=test --base=origin/master
-    - yarn nx affected --target=lint --base=origin/master
-    - yarn nx affected --target=build --base=origin/master --prod
+name: Nx Distributed Tasks
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: git fetch --no-tags --prune --depth=1 origin master
+      - run: yarn install
+      - run: yarn nx affected --target=test --base=origin/master
+      - run: yarn nx affected --target=lint --base=origin/master
+      - run: yarn nx affected --target=build --base=origin/master --prod
 ```
 
 the CI time will go down from 45 minutes to 8 minutes.
@@ -73,14 +79,20 @@ This is a good result. It helps to lower the average CI time, but doesn't help w
 You could make it faster by running the commands in parallel:
 
 ```yaml
-ci:
-  image: node:12.16.3-alpine3.11
-  before_script:
-    - yarn install
-  script:
-    - yarn nx affected --target=test --base=origin/master --parallel
-    - yarn nx affected --target=lint --base=origin/master --parallel
-    - yarn nx affected --target=build --base=origin/master --prod --parallel
+name: Nx Distributed Tasks
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: git fetch --no-tags --prune --depth=1 origin master
+      - run: yarn install
+      - run: yarn nx affected --target=test --base=origin/master --parallel
+      - run: yarn nx affected --target=lint --base=origin/master --parallel
+      - run: yarn nx affected --target=build --base=origin/master --prod --parallel
 ```
 
 This helps but it still has a ceiling. At some point, this won't be enough. A single agent is simply insufficent. You need to distribute CI across a grid of machines.
@@ -102,13 +114,18 @@ Prepare Distributed Tasks - lint2
 
 ### Distributed Setup
 
-The following job get benefits of [Gitlab CI job parallel instances](https://docs.gitlab.com/ee/ci/yaml/#parallel).
+The following job get benefits of [Github actions matrix strategy](https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix) to run jobs in parallel.
 
 ```yaml
-lint:
-  parallel: 4
-  script:
-    - node ./tools/scripts/run-many.js lint $CI_NODE_INDEX $CI_NODE_TOTAL $CI_COMMIT_REF_SLUG
+distributed-task:
+  runs-on: ubuntu-latest
+  needs: install-deps
+  strategy:
+    matrix:
+      target: ['lint', 'test', 'build', 'e2e']
+      index: [1, 2, 3, 4, 5, 6]
+  steps:
+    - run: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} 6 $GITHUB_REF
 ```
 
 Where `run-many.js` looks like this:
@@ -119,8 +136,8 @@ const execSync = require('child_process').execSync;
 const target = process.argv[2];
 const jobIndex = Number(process.argv[3]);
 const jobCount = Number(process.argv[4]);
-const isMaster = process.argv[5] === 'master';
-const baseSha = isMaster ? 'master~1' : 'master';
+const isMaster = process.argv[5] === 'refs/head/master';
+const baseSha = isMaster ? 'origin/master~1' : 'origin/master';
 
 const affected = execSync(
   `npx nx print-affected --base=${baseSha} --target=${target}`
@@ -137,7 +154,7 @@ if (projects.length > 0) {
   execSync(
     `npx nx run-many --target=${target} --projects=${projects.join(
       ','
-    )} --parallel`,
+    )} --parallel}`,
     {
       stdio: [0, 1, 2]
     }
@@ -150,13 +167,13 @@ Let's step through it:
 The following defines the base sha Nx uses to execute affected commands.
 
 ```javascript
-const isMaster = process.argv[2] === 'False';
+const isMaster = process.argv[5] === 'refs/heads/master';
 const baseSha = isMaster ? 'origin/master~1' : 'origin/master';
 ```
 
 If it is a PR, Nx sees what has changed compared to `origin/master`. If it's master, Nx sees what has changed compared to the previous commit (this can be made more robust by remembering the last successful master run, which can be done by labeling the commit).
 
-The following calculates the projects to execute given the `$CI_NODE_INDEX` and `$CI_NODE_TOTAL` job variables passed by Gitlab CI.
+The following calculates the projects to execute given the `${{ matrix.index }}` job index variable and the harcoded job count (`6` in our example).
 
 ```javascript
 const sliceSize = Math.floor(array.length / jobCount);
@@ -174,7 +191,7 @@ execSync(`npx nx print-affected --base=${baseSha} --target=${target}`)
   .trim();
 ```
 
-Feel free to adapt the number of `parallel` instances to run per job (eg: `2` for build, `8` for test, etc.) to keep CI time under 15 minutes regardless how big the repo is.
+Feel free to adapt the indexes in the matrix to increase the jobs to run parallely to keep CI time under 15 minutes regardless how big the repo is.
 
 ## Summary
 
