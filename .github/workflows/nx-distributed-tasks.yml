@@ -1,0 +1,98 @@
+name: Nx Distributed Tasks
+
+on: push
+
+env:
+  CYPRESS_CACHE: cache-cypress
+  CYPRESS_CACHE_FOLDER: cache/Cypress
+  DEPENDENCIES_CACHE: cache-node-modules
+  NX_CACHE: cache-nx
+
+jobs:
+
+  install-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
+      - uses: actions/setup-node@v1
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          node-version: 12.x
+      - name: yarn install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --pure-lockfile
+
+  format:
+    runs-on: ubuntu-latest
+    needs: install-deps
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
+      - run: git fetch --no-tags --prune --depth=1 origin master
+      - run: echo "GITHUB_BASE_SHA=$([[ "$GITHUB_REF" == "refs/origin/master" ]] && echo "origin/master~1" || echo "origin/master")" >> $GITHUB_ENV
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
+      - run: git fetch --no-tags --prune --depth=1 origin master
+      - run: yarn format:check --base=$GITHUB_BASE_SHA
+
+  distributed-task:
+    runs-on: ubuntu-latest
+    needs: install-deps
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ['lint', 'test', 'build', 'e2e']
+        index: [1, 2, 3, 4]
+    env:
+      count: 4
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
+      - name: Cache Nx
+        uses: actions/cache@v2
+        with:
+          path: node_modules/.cache/nx
+          key: ${{ env.NX_CACHE }}
+      - name: Cache Cypress
+        uses: actions/cache@v2
+        if: ${{ matrix.target == 'e2e' }}
+        with:
+          path: ${{ env.CYPRESS_CACHE_FOLDER }}
+          key: ${{ env.CYPRESS_CACHE }}
+      - run: git fetch --no-tags --prune --depth=1 origin master
+      - name: nx run-many:build
+        if: ${{ matrix.target == 'build' }}
+        run: node ./tools/scripts/run-many.js build ${{ matrix.index }} ${{ env.count }} $GITHUB_REF --prod
+      - name: nx run-many:e2e
+        uses: cypress-io/github-action@v2
+        if: ${{ matrix.target == 'e2e' }}
+        with:
+          command: node ./tools/scripts/run-many.js e2e ${{ matrix.index }} ${{ env.count }} $GITHUB_REF
+      - name: nx run-many:${{ matrix.target }}
+        if: ${{ matrix.target != 'build' && matrix.target != 'e2e' }}
+        run: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} $GITHUB_REF
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-artifacts
+          path: dist
