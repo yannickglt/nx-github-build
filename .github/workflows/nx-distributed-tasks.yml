@@ -1,6 +1,10 @@
 name: Nx Distributed Tasks
 
-on: push
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 env:
   BUILD_ARTIFACTS: dist-artifacts
@@ -10,6 +14,17 @@ env:
   NX_CACHE: cache-nx
 
 jobs:
+
+  vars:
+    runs-on: ubuntu-latest
+    outputs:
+      GITHUB_HEAD_REF: ${{ steps.GITHUB_HEAD_REF.outputs.value }}
+      GITHUB_BASE_REF: ${{ steps.GITHUB_BASE_REF.outputs.value }}
+    steps:
+      - id: GITHUB_HEAD_REF
+        run: echo "::set-output name=value::$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}})"
+      - id: GITHUB_BASE_REF
+        run: echo "::set-output name=value::$(echo ${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}})"
 
   install-deps:
     runs-on: ubuntu-latest
@@ -27,7 +42,7 @@ jobs:
 
   format:
     runs-on: ubuntu-latest
-    needs: install-deps
+    needs: [vars, install-deps]
     steps:
       - uses: actions/checkout@v2
       - name: Cache node modules
@@ -35,13 +50,15 @@ jobs:
         with:
           path: node_modules
           key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
-      - run: git fetch --no-tags --prune --depth=5 origin master
-      - run: echo "GITHUB_BASE_SHA=$([[ "$GITHUB_REF" == "refs/origin/master" ]] && echo "origin/master~1" || echo "origin/master")" >> $GITHUB_ENV
-      - run: node --max-old-space-size=8000 ./node_modules/@nrwl/cli/bin/nx.js format:check --base=$GITHUB_BASE_SHA
+      - run: git fetch --no-tags --prune origin ${{ needs.vars.outputs.GITHUB_BASE_REF }} ${{ needs.vars.outputs.GITHUB_HEAD_REF }}
+      - name: Compute Nx arguments
+        run: echo "NX_ARGUMENTS=--base=origin/${{ needs.vars.outputs.GITHUB_BASE_REF }}" >> $GITHUB_ENV
+        if: needs.vars.outputs.GITHUB_HEAD_REF != needs.vars.outputs.GITHUB_BASE_REF
+      - run: node --max-old-space-size=8000 ./node_modules/@nrwl/cli/bin/nx.js format:check $NX_ARGUMENTS
 
   distributed-task:
     runs-on: ubuntu-latest
-    needs: install-deps
+    needs: [vars, install-deps]
     strategy:
       fail-fast: false
       matrix:
@@ -71,18 +88,18 @@ jobs:
         with:
           path: ${{ env.CYPRESS_CACHE_FOLDER }}
           key: ${{ env.CYPRESS_CACHE }}
-      - run: git fetch --no-tags --prune --depth=5 origin master
+      - run: git fetch --no-tags --prune origin ${{ needs.vars.outputs.GITHUB_BASE_REF }} ${{ needs.vars.outputs.GITHUB_HEAD_REF }}
       - name: Compute Nx arguments
         if: matrix.target == 'build' || matrix.target == 'e2e'
         run: echo "NX_ARGUMENTS=--prod" >> $GITHUB_ENV
       - name: nx run-many:${{ matrix.target }}
         if: matrix.target != 'e2e'
-        run: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} $GITHUB_REF $NX_ARGUMENTS
+        run: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} ${{ needs.vars.outputs.GITHUB_HEAD_REF }} ${{ needs.vars.outputs.GITHUB_BASE_REF }} $NX_ARGUMENTS
       - name: nx run-many:e2e
         if: matrix.target == 'e2e'
         uses: cypress-io/github-action@v2
         with:
-          command: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} $GITHUB_REF $NX_ARGUMENTS
+          command: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} ${{ needs.vars.outputs.GITHUB_HEAD_REF }} ${{ needs.vars.outputs.GITHUB_BASE_REF }} $NX_ARGUMENTS
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
