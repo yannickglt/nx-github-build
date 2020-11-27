@@ -31,14 +31,20 @@ This example will use Github Actions, but you'll find similar setup for [Azure P
 Most projects that don't use Nx end up building, testing, and linting every single library and application in the repository. The easiest way to implement it with Nx is to do something like this:
 
 ```yaml
-ci:
-  image: node:12.16.3-alpine3.11
-  before_script:
-    - yarn install
-  script:
-    - yarn nx run-many --target=test --all
-    - yarn nx run-many --target=lint --all
-    - yarn nx run-many --target=build --all --prod
+name: Nx Distributed Tasks
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: git fetch --no-tags --prune --depth=1 origin master
+      - run: yarn install
+      - run: yarn nx run-many --target=test --all
+      - run: yarn nx run-many --target=lint --all
+      - run: yarn nx run-many --target=build --all --prod
 ```
 
 This will retest, relint, rebuild every project. Doing this for this repository takes about 45 minutes (note that most enterprise monorepos are significantly larger, so in those cases we are talking about many hours.)
