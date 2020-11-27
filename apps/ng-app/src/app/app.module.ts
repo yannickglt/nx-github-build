@@ -37,9 +37,9 @@ import { AppComponent } from './app.component';
     Lib11Module,
     Lib12Module,
     Lib13Module,
-    Lib14Module
+    Lib14Module,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

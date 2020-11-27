@@ -4,7 +4,7 @@ import { Lib8Module } from './lib8.module';
 describe('Lib8Module', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [Lib8Module]
+      imports: [Lib8Module],
     }).compileComponents();
   }));
 

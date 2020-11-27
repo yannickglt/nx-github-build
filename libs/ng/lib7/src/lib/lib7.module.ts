@@ -65,8 +65,8 @@ import { Lib7MainComponent } from './lib7-main/lib7-main.component';
     Lib7Component27Component,
     Lib7Component28Component,
     Lib7Component29Component,
-    Lib7MainComponent
+    Lib7MainComponent,
   ],
-  exports: [Lib7MainComponent]
+  exports: [Lib7MainComponent],
 })
 export class Lib7Module {}

@@ -65,8 +65,8 @@ import { Lib14MainComponent } from './lib14-main/lib14-main.component';
     Lib14Component27Component,
     Lib14Component28Component,
     Lib14Component29Component,
-    Lib14MainComponent
+    Lib14MainComponent,
   ],
-  exports: [Lib14MainComponent]
+  exports: [Lib14MainComponent],
 })
 export class Lib14Module {}

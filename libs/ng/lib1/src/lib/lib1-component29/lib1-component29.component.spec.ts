@@ -8,7 +8,7 @@ describe('Lib1Component29Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [Lib1Component29Component]
+      declarations: [Lib1Component29Component],
     }).compileComponents();
   }));
 

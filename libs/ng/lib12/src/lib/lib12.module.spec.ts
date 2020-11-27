@@ -4,7 +4,7 @@ import { Lib12Module } from './lib12.module';
 describe('Lib12Module', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [Lib12Module]
+      imports: [Lib12Module],
     }).compileComponents();
   }));
 

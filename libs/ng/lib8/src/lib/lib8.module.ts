@@ -65,8 +65,8 @@ import { Lib8MainComponent } from './lib8-main/lib8-main.component';
     Lib8Component27Component,
     Lib8Component28Component,
     Lib8Component29Component,
-    Lib8MainComponent
+    Lib8MainComponent,
   ],
-  exports: [Lib8MainComponent]
+  exports: [Lib8MainComponent],
 })
 export class Lib8Module {}

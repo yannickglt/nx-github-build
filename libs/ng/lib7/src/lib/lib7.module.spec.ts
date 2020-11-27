@@ -4,7 +4,7 @@ import { Lib7Module } from './lib7.module';
 describe('Lib7Module', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [Lib7Module]
+      imports: [Lib7Module],
     }).compileComponents();
   }));
 

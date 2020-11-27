@@ -65,8 +65,8 @@ import { Lib10MainComponent } from './lib10-main/lib10-main.component';
     Lib10Component27Component,
     Lib10Component28Component,
     Lib10Component29Component,
-    Lib10MainComponent
+    Lib10MainComponent,
   ],
-  exports: [Lib10MainComponent]
+  exports: [Lib10MainComponent],
 })
 export class Lib10Module {}

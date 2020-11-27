@@ -4,7 +4,7 @@ import { SHARED_CONST } from '@happyorg/shared-utils';
 @Component({
   selector: 'happyorg-lib12-component13',
   templateUrl: './lib12-component13.component.html',
-  styleUrls: ['./lib12-component13.component.css']
+  styleUrls: ['./lib12-component13.component.css'],
 })
 export class Lib12Component13Component implements OnInit {
   sharedConst = SHARED_CONST;

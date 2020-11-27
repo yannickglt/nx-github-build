@@ -65,8 +65,8 @@ import { Lib9MainComponent } from './lib9-main/lib9-main.component';
     Lib9Component27Component,
     Lib9Component28Component,
     Lib9Component29Component,
-    Lib9MainComponent
+    Lib9MainComponent,
   ],
-  exports: [Lib9MainComponent]
+  exports: [Lib9MainComponent],
 })
 export class Lib9Module {}

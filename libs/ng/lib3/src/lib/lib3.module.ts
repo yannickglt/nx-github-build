@@ -65,8 +65,8 @@ import { Lib3MainComponent } from './lib3-main/lib3-main.component';
     Lib3Component27Component,
     Lib3Component28Component,
     Lib3Component29Component,
-    Lib3MainComponent
+    Lib3MainComponent,
   ],
-  exports: [Lib3MainComponent]
+  exports: [Lib3MainComponent],
 })
 export class Lib3Module {}
