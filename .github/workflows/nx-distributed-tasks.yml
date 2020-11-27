@@ -38,7 +38,7 @@ jobs:
         with:
           path: node_modules
           key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
-      - run: git fetch --no-tags --prune --depth=1 origin master
+      - run: git fetch --no-tags --prune --depth=5 origin master
       - run: echo "GITHUB_BASE_SHA=$([[ "$GITHUB_REF" == "refs/origin/master" ]] && echo "origin/master~1" || echo "origin/master")" >> $GITHUB_ENV
       - run: node --max-old-space-size=8000 ./node_modules/@nrwl/cli/bin/nx.js format:check --base=$GITHUB_BASE_SHA
 
@@ -76,7 +76,7 @@ jobs:
         with:
           path: ${{ env.CYPRESS_CACHE_FOLDER }}
           key: ${{ env.CYPRESS_CACHE }}
-      - run: git fetch --no-tags --prune --depth=1 origin master
+      - run: git fetch --no-tags --prune --depth=5 origin master
       - name: nx run-many:build
         if: matrix.target == 'build'
         run: node ./tools/scripts/run-many.js build ${{ matrix.index }} ${{ env.count }} $GITHUB_REF --prod
