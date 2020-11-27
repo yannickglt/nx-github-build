@@ -1,16 +1,14 @@
+import React from 'react';
+import { SHARED_CONST } from '@happyorg/shared-utils';
 
-        import React from 'react';
-        import { SHARED_CONST } from '@happyorg/shared-utils'; 
+import './lib12-component27.css';
 
-        import './lib12-component27.css';
-        
-        export const Lib12Component27 = () => {
-          return (
-            <div>
-              <h1>Welcome to lib0-component0 component! {SHARED_CONST}</h1>
-            </div>
-          );
-        };
-        
-        export default Lib12Component27;
-        
+export const Lib12Component27 = () => {
+  return (
+    <div>
+      <h1>Welcome to lib0-component0 component! {SHARED_CONST}</h1>
+    </div>
+  );
+};
+
+export default Lib12Component27;

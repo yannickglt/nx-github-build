@@ -1,0 +1,207 @@
+{
+  "migrations": [
+    {
+      "version": "8.10.0-beta.1",
+      "description": "Fix rules in `tslint.json`",
+      "factory": "./src/migrations/update-8-10-0/fix-tslint-json",
+      "package": "@nrwl/workspace",
+      "name": "fix-tslint-json"
+    },
+    {
+      "version": "8.12.0-beta.1",
+      "description": "Add implicit e2e dependencies",
+      "factory": "./src/migrations/update-8-12-0/add-implicit-e2e-deps",
+      "package": "@nrwl/workspace",
+      "name": "add-implicit-e2e-deps"
+    },
+    {
+      "version": "8.12.0-beta.1",
+      "description": "Update package.json dependencies",
+      "factory": "./src/migrations/update-8-12-0/update-package-json-deps",
+      "package": "@nrwl/workspace",
+      "name": "update-package-json-deps"
+    },
+    {
+      "version": "8.12.0-beta.1",
+      "description": "Add enforceBuildableLibDependency flag to the nx enforce boundary lint rule",
+      "factory": "./src/migrations/update-8-12-0/update-enforce-boundary-lint-rule",
+      "package": "@nrwl/workspace",
+      "name": "update-enforce-boundary-lint-rule"
+    },
+    {
+      "version": "9.0.0-beta.1",
+      "description": "Update typescript to 3.6 and angular/cli to version 9",
+      "factory": "./src/migrations/update-9-0-0/update-9-0-0",
+      "package": "@nrwl/workspace",
+      "name": "update-9-0-0"
+    },
+    {
+      "version": "9.1.0-beta.1",
+      "description": "Update prettier to 1.19.1 with support for typescript 3.7; Update eslint and tslint",
+      "factory": "./src/migrations/update-9-1-0/update-9-1-0",
+      "package": "@nrwl/workspace",
+      "name": "update-9-1-0"
+    },
+    {
+      "version": "9.1.0-beta.1",
+      "description": "Update eslint and tslint config to provide better IDE support",
+      "factory": "./src/migrations/update-9-1-0/update-lint-config",
+      "package": "@nrwl/workspace",
+      "name": "update-lint-config-9-1-0"
+    },
+    {
+      "version": "9.2.0-beta.1",
+      "description": "Add cacheable operations to nx.json",
+      "factory": "./src/migrations/update-9-2-0/update-9-2-0",
+      "package": "@nrwl/workspace",
+      "name": "update-9-2-0"
+    },
+    {
+      "version": "9.3.0-beta.1",
+      "description": "Update prettier to v2",
+      "factory": "./src/migrations/update-9-3-0/update-9-3-0",
+      "package": "@nrwl/workspace",
+      "name": "update-9-3-0"
+    },
+    {
+      "version": "9.4.0-beta.1",
+      "description": "Remove config builder option when using eslint to enable automatic detection",
+      "factory": "./src/migrations/update-9-4-0/update-eslint-config",
+      "package": "@nrwl/workspace",
+      "name": "update-eslint-config"
+    },
+    {
+      "version": "9.4.0-beta.1",
+      "description": "Fix exclude patterns in tslint and eslint to ensure it does not break linting when a files option is defined",
+      "factory": "./src/migrations/update-9-4-0/update-linters-exclude",
+      "package": "@nrwl/workspace",
+      "name": "update-linters-exclude"
+    },
+    {
+      "version": "9.4.0-beta.1",
+      "description": "Decorate cli to enable computation caching",
+      "factory": "./src/migrations/update-9-4-0/add-decorate-cli",
+      "package": "@nrwl/workspace",
+      "name": "add-decorate-cli"
+    },
+    {
+      "version": "8.12.0-beta.1",
+      "description": "Changes Angular library builder to @nrwl/angular:package",
+      "factory": "./src/migrations/update-8-12-0/change-angular-lib-builder",
+      "package": "@nrwl/angular",
+      "name": "change-angular-lib-builder"
+    },
+    {
+      "version": "8.10.0-beta.1",
+      "description": "Update Cypress to 3.6.1",
+      "factory": "./src/migrations/update-8-10-0/update-8-10-0",
+      "package": "@nrwl/cypress",
+      "name": "update-8.10.0"
+    },
+    {
+      "version": "8.12.0-beta.1",
+      "description": "Update Cypress to ^3.8.2",
+      "factory": "./src/migrations/update-8-12-0/update-8-12-0",
+      "package": "@nrwl/cypress",
+      "name": "update-8.12.0"
+    },
+    {
+      "version": "9.4.0-beta.1",
+      "description": "Add Cypress ESLint plugin",
+      "factory": "./src/migrations/update-9-4-0/add-cypress-eslint-plugin-9-4-0",
+      "package": "@nrwl/cypress",
+      "name": "add-cypress-eslint-plugin-9.4.0"
+    },
+    {
+      "version": "9.0.0-beta.1",
+      "description": "Upgrades jest-preset-angular to 8.0.0",
+      "factory": "./src/migrations/update-9-0-0/update-9-0-0",
+      "package": "@nrwl/jest",
+      "name": "update-9.0.0"
+    },
+    {
+      "version": "9.0.1-beta.1",
+      "description": "Correctly sets passWithNoTests option",
+      "factory": "./src/migrations/update-9-0-1/update-9-0-1",
+      "package": "@nrwl/jest",
+      "name": "update-9.0.1"
+    },
+    {
+      "version": "9.2.0-beta.3",
+      "description": "Update jest to v25",
+      "factory": "./src/migrations/update-9-2-0/update-9-2-0",
+      "package": "@nrwl/jest",
+      "name": "update-9.2.0"
+    },
+    {
+      "version": "8.9.0-beta.1",
+      "description": "Update React libraries",
+      "factory": "./src/migrations/update-8-9-0/update-8-9-0",
+      "package": "@nrwl/react",
+      "name": "update-8.9.0"
+    },
+    {
+      "version": "8.10.0-beta.1",
+      "description": "Update React libraries",
+      "factory": "./src/migrations/update-8-10-0/update-8-10-0",
+      "package": "@nrwl/react",
+      "name": "update-8.10.0"
+    },
+    {
+      "version": "8.10.1-beta.1",
+      "description": "Fix SVG migration",
+      "factory": "./src/migrations/update-8-10-1/fix-react-tsconfig-8-10-1",
+      "package": "@nrwl/react",
+      "name": "fix-react-tsconfig-8.10.1"
+    },
+    {
+      "version": "8.12.0-beta.1",
+      "description": "Update styled-components",
+      "factory": "./src/migrations/update-8-12-0/update-8-12-0",
+      "package": "@nrwl/react",
+      "name": "update-8.12.0"
+    },
+    {
+      "version": "8.12.0-beta.1",
+      "description": "Ensure React correct webpack config and babel preset",
+      "factory": "./src/migrations/update-8-12-0/fix-react-files-8-12-0",
+      "package": "@nrwl/react",
+      "name": "fix-react-files-8.12.0"
+    },
+    {
+      "version": "9.4.0-beta.1",
+      "description": "Update libraries",
+      "factory": "./src/migrations/update-9-4-0/update-9-4-0",
+      "package": "@nrwl/react",
+      "name": "update-9.4.0"
+    },
+    {
+      "version": "9.4.0-beta.1",
+      "description": "Migrate to new babel setup for greater flexibility",
+      "factory": "./src/migrations/update-9-4-0/babelrc-9-4-0",
+      "package": "@nrwl/react",
+      "name": "babelrc-9.4.0"
+    },
+    {
+      "version": "9.5.0-beta.1",
+      "description": "Update libraries",
+      "factory": "./src/migrations/update-9-5-0/update-9-5-0",
+      "package": "@nrwl/react",
+      "name": "update-9.5.0"
+    },
+    {
+      "version": "9.0.0-beta.1",
+      "description": "Rename @nrwl/web:bundle => @nrwl/web:package",
+      "factory": "./src/migrations/update-9-0-0/update-builder-9-0-0",
+      "package": "@nrwl/web",
+      "name": "update-builder-9.0.0"
+    },
+    {
+      "version": "9.2.0-beta.1",
+      "description": "Set buildLibsFromSource property to true to not break existing projects.",
+      "factory": "./src/migrations/update-9-2-0/set-build-libs-from-source",
+      "package": "@nrwl/web",
+      "name": "set-build-libs-from-source"
+    }
+  ]
+}

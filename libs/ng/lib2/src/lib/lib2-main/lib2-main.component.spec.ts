@@ -1,7 +1,5 @@
-
-    describe('empty', () => {
-      it('empty', () => {
-        expect(1).toEqual(1);
-      })
-    });
-  
+describe('empty', () => {
+  it('empty', () => {
+    expect(1).toEqual(1);
+  });
+});

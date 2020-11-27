@@ -13,10 +13,12 @@
       "tags": []
     },
     "react-app-e2e": {
-      "tags": []
+      "tags": [],
+      "implicitDependencies": ["react-app"]
     },
     "ng-app-e2e": {
-      "tags": []
+      "tags": [],
+      "implicitDependencies": ["ng-app"]
     },
     "ng-app": {
       "tags": []
@@ -113,6 +115,14 @@
     },
     "react-lib14": {
       "tags": []
+    }
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
     }
   }
 }

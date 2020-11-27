@@ -142,7 +142,7 @@ const baseSha = isMaster ? 'origin/master~1' : 'origin/master';
 const affected = execSync(
   `npx nx print-affected --base=${baseSha} --target=${target}`
 ).toString('utf-8');
-const array = JSON.parse(affected).tasks.map(t => t.target.project);
+const array = JSON.parse(affected).tasks.map((t) => t.target.project);
 array.sort();
 const sliceSize = Math.floor(array.length / jobCount);
 const projects =
@@ -156,7 +156,7 @@ if (projects.length > 0) {
       ','
     )} --parallel}`,
     {
-      stdio: [0, 1, 2]
+      stdio: [0, 1, 2],
     }
   );
 }
