@@ -6,7 +6,7 @@
     "tsconfig.json": "*",
     "tslint.json": "*",
     "nx.json": "*",
-    ".gitlab-ci.yml": "*"
+    ".github/workflows/**": "*"
   },
   "projects": {
     "react-app": {
@@ -119,7 +119,6 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
