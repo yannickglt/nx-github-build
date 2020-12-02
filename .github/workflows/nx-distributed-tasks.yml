@@ -3,6 +3,7 @@ name: Nx Distributed Tasks
 on: push
 
 env:
+  BUILD_ARTIFACTS: dist-artifacts
   CYPRESS_CACHE: cache-cypress
   CYPRESS_CACHE_FOLDER: cache/Cypress
   DEPENDENCIES_CACHE: cache-node-modules
@@ -20,10 +21,6 @@ jobs:
         with:
           path: node_modules
           key: ${{ env.DEPENDENCIES_CACHE }}-${{ hashFiles('yarn.lock') }}
-      - uses: actions/setup-node@v1
-        if: steps.cache.outputs.cache-hit != 'true'
-        with:
-          node-version: 12.x
       - name: yarn install
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --pure-lockfile
@@ -54,8 +51,6 @@ jobs:
       count: 4
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Cache node modules
         uses: actions/cache@v2
         with:
@@ -67,7 +62,7 @@ jobs:
           path: node_modules/.cache/nx
           key: ${{ env.NX_CACHE }}-${{ hashFiles('yarn.lock') }}-${{ matrix.target }}-${{ matrix.index }}-${{ github.sha }}
           restore-keys: |
-            ${{ env.NX_CACHE }}-${{ matrix.target }}-${{ matrix.index }}-
+            ${{ env.NX_CACHE }}-${{ hashFiles('yarn.lock') }}-${{ matrix.target }}-${{ matrix.index }}-
             ${{ env.NX_CACHE }}-${{ hashFiles('yarn.lock') }}-
             ${{ env.NX_CACHE }}-
       - name: Cache Cypress
@@ -77,19 +72,19 @@ jobs:
           path: ${{ env.CYPRESS_CACHE_FOLDER }}
           key: ${{ env.CYPRESS_CACHE }}
       - run: git fetch --no-tags --prune --depth=5 origin master
-      - name: nx run-many:build
-        if: matrix.target == 'build'
-        run: node ./tools/scripts/run-many.js build ${{ matrix.index }} ${{ env.count }} $GITHUB_REF --prod
-      - name: nx run-many:e2e
-        uses: cypress-io/github-action@v2
-        if: matrix.target == 'e2e'
-        with:
-          command: node ./tools/scripts/run-many.js e2e ${{ matrix.index }} ${{ env.count }} $GITHUB_REF
+      - name: Compute Nx arguments
+        if: matrix.target == 'build' || matrix.target == 'e2e'
+        run: echo "NX_ARGUMENTS=--prod" >> $GITHUB_ENV
       - name: nx run-many:${{ matrix.target }}
-        if: matrix.target != 'build' && matrix.target != 'e2e'
-        run: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} $GITHUB_REF
+        if: matrix.target != 'e2e'
+        run: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} $GITHUB_REF $NX_ARGUMENTS
+      - name: nx run-many:e2e
+        if: matrix.target == 'e2e'
+        uses: cypress-io/github-action@v2
+        with:
+          command: node ./tools/scripts/run-many.js ${{ matrix.target }} ${{ matrix.index }} ${{ env.count }} $GITHUB_REF $NX_ARGUMENTS
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: dist-artifacts
+          name: ${{ env.BUILD_ARTIFACTS }}
           path: dist
